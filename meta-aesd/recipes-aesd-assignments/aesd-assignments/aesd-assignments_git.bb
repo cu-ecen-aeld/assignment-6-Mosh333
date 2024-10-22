@@ -39,4 +39,10 @@ do_install () {
 	# and
 	# https://docs.yoctoproject.org/ref-manual/variables.html?highlight=workdir#term-S
 	# See example at https://github.com/cu-ecen-aeld/ecen5013-yocto/blob/ecen5013-hello-world/meta-ecen5013/recipes-ecen5013/ecen5013-hello-world/ecen5013-hello-world_git.bb
+
+        # probably need to do something like:
+        # https://github.com/cu-ecen-aeld/assignment-5-Mosh333/blob/master/base_external/package/aesd-assignments/aesd-assignments.mk
+        # https://github.com/cu-ecen-aeld/assignment-4-Mosh333/blob/master/base_external/package/aesd-assignments/aesd-assignments.mk
+
+
 }
