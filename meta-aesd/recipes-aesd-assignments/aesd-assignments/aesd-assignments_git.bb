@@ -5,10 +5,12 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 # TODO: Set this  with the path to your assignments rep.  Use ssh protocol and see lecture notes
 # about how to setup ssh-agent for passwordless access
 # SRC_URI = "git://git@github.com/cu-ecen-aeld/<your assignments repo>;protocol=ssh;branch=master"
+SRC_URI = "git://git@github.com/cu-ecen-aeld/assignments-3-and-later-Mosh333;protocol=ssh;branch=main"
 
 PV = "1.0+git${SRCPV}"
 # TODO: set to reference a specific commit hash in your assignment repo
 #SRCREV = "f99b82a5d4cb2a22810104f89d4126f52f4dfaba"
+SRCREV = "772883061853bc0ea80a8bf3932e52d6e1a80fa9"
 
 # This sets your staging directory based on WORKDIR, where WORKDIR is defined at 
 # https://docs.yoctoproject.org/ref-manual/variables.html?highlight=workdir#term-WORKDIR
@@ -19,9 +21,18 @@ S = "${WORKDIR}/git/server"
 # TODO: Add the aesdsocket application and any other files you need to install
 # See https://git.yoctoproject.org/poky/plain/meta/conf/bitbake.conf?h=kirkstone
 #FILES:${PN} += "${bindir}/aesdsocket"
+FILES:${PN} += "${bindir}/aesdsocket"
+
 # TODO: customize these as necessary for any libraries you need for your application
 # (and remove comment)
 #TARGET_LDFLAGS += "-pthread -lrt"
+
+
+#from lecture video on "Building a Yocto Image"
+INITSCRIPT_PACKAGES = "${PN}"
+INITSCRIPT_NAME = "aesdsocket-init"
+INITSCRIPT_PARAMS = "defaults 99"
+inherit update-rc.d
 
 do_configure () {
 	:
@@ -43,6 +54,17 @@ do_install () {
         # probably need to do something like:
         # https://github.com/cu-ecen-aeld/assignment-5-Mosh333/blob/master/base_external/package/aesd-assignments/aesd-assignments.mk
         # https://github.com/cu-ecen-aeld/assignment-4-Mosh333/blob/master/base_external/package/aesd-assignments/aesd-assignments.mk
+	
+	#create the destination directory, see https://siliconbladeconsultants.com/2020/07/31/common-variables-for-yocto-recipes/
+	# ${binddir} is /usr/bin
+	# ${D} is ${WORKDIR}/image
+	install -d ${D}${bindir}
+	#install the binary to the directory
+	install -m 0755 ${S}/aesdsocket ${D}${bindir}/
+
+	#from lecture video on "Building a Yocto Image"
+	install -d ${D}${sysconfdir}/init.d/
+	install -m 0755 ${S}/aesdsocket-start-stop ${D}${sysconfdir}/init.d/aesdsocket-init
 
 
 }
